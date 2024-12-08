@@ -2,13 +2,13 @@ name: CI/CD Pipeline # 파이프라인의 이름
 
 # main 브랜치에 push가 있을 때마다 파이프라인을 실행
 on:
-    push:
+  push:
     branches:
-    - main # main 브랜치에 대한 푸시 이벤트가 발생할 때 실행
-    workflow_dispatch: # 수동으로 배포를 트리거 할 수 있는 이벤트 추가
+      - main # main 브랜치에 대한 푸시 이벤트가 발생할 때 실행
+  workflow_dispatch: # 수동으로 배포를 트리거 할 수 있는 이벤트 추가
 
 jobs:
-    build: # 빌드 작업 정의
+  build: # 빌드 작업 정의
     runs-on: ubuntu-latest # Ubuntu 환경에서 실행
 
     steps:
@@ -24,34 +24,34 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v2 # DockerHub 로그인 액션 사용
         with:
-            username: ${{ secrets.DOCKER_USERNAME }} # DockerHub 사용자명 (GitHub Secrets에서 가져옴)
-            password: ${{ secrets.DOCKER_PASSWORD }} # DockerHub 비밀번호 (GitHub Secrets에서 가져옴)
+          username: ${{ secrets.DOCKER_USERNAME }} # DockerHub 사용자명 (GitHub Secrets에서 가져옴)
+          password: ${{ secrets.DOCKER_PASSWORD }} # DockerHub 비밀번호 (GitHub Secrets에서 가져옴)
 
       # Docker 이미지 빌드: 현재 디렉토리의 Dockerfile을 사용하여 이미지를 빌드
       - name: Build Docker image
         run: |
-            docker build -t my-image .  # 'DailyDoodle'라는 이름으로 Docker 이미지 빌드
-            docker tag my-image:latest my-image:DailyDoodle  # 'DailyDoodle' 태그 추가
+          docker build -t my-image .  # 'DailyDoodle'라는 이름으로 Docker 이미지 빌드
+          docker tag my-image:latest my-image:DailyDoodle  # 'DailyDoodle' 태그 추가
 
       # Docker 이미지 푸시: 빌드된 이미지를 DockerHub에 푸시
       - name: Push Docker image to DockerHub
         run: |
-            docker push my-image:DailyDoodle  # DockerHub로 'DailyDoodle' 이미지를 푸시
+          docker push my-image:DailyDoodle  # DockerHub로 'DailyDoodle' 이미지를 푸시
 
-    deploy: # 배포 작업 정의
-        runs-on: ubuntu-latest # Ubuntu 환경에서 실행
-        needs: build # 'build' 작업이 완료된 후 실행되도록 설정
-        if: ${{ github.event_name == 'workflow_dispatch' }} # 수동으로만 배포 작업 실행
+  deploy: # 배포 작업 정의
+    runs-on: ubuntu-latest # Ubuntu 환경에서 실행
+    needs: build # 'build' 작업이 완료된 후 실행되도록 설정
+    if: ${{ github.event_name == 'workflow_dispatch' }} # 수동으로만 배포 작업 실행
 
     steps:
       # EC2에 SSH 연결하여 배포: Appleboy SSH 액션을 사용하여 EC2 서버에 접속하고 Docker 이미지를 실행
       - name: SSH to EC2 and deploy
         uses: appleboy/ssh-action@v0.1.5 # EC2에 SSH 연결하는 액션 사용
         with:
-            host: ${{ secrets.EC2_HOST }} # EC2 호스트 (GitHub Secrets에서 가져옴)
-            username: ${{ secrets.EC2_USER }} # EC2 사용자명 (GitHub Secrets에서 가져옴)
-            key: ${{ secrets.EC2_SSH_KEY }} # EC2 SSH 키 (GitHub Secrets에서 가져옴)
-            port: 22 # SSH 포트 (기본적으로 22번 포트를 사용)
-            script: |
-                docker pull my-image:DailyDoodle  # DockerHub에서 'DailyDoodle' 이미지를 가져옴
-                docker run -d -p 8090:80 my-image:DailyDoodle  # 서버 8090 포트를 Docker 컨테이너 80번 포트로 실행
+          host: ${{ secrets.EC2_HOST }} # EC2 호스트 (GitHub Secrets에서 가져옴)
+          username: ${{ secrets.EC2_USER }} # EC2 사용자명 (GitHub Secrets에서 가져옴)
+          key: ${{ secrets.EC2_SSH_KEY }} # EC2 SSH 키 (GitHub Secrets에서 가져옴)
+          port: 22 # SSH 포트 (기본적으로 22번 포트를 사용)
+          script: |
+            docker pull my-image:DailyDoodle  # DockerHub에서 'DailyDoodle' 이미지를 가져옴
+            docker run -d -p 80:80 my-image:DailyDoodle  # 포트 80에서 Docker 컨테이너를 실행
