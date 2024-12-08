@@ -1,5 +1,5 @@
 # Docker 이미지를 선택하는 명령어
-FROM node:18-alpine
+FROM node:20-alpine
 
 #Docker 컨테이너 내에서 작업 디렉토리
 WORKDIR /app

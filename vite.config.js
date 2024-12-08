@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react-swc';
 import eslintPlugin from 'vite-plugin-eslint';
 //import VitePWA from '@vitejs/plugin-pwa';
 import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // __dirname 대체
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -16,7 +18,10 @@ export default defineConfig({
     //VitePWA(),
   ],
   server: {
-    port: import.meta.env.PORT || 3000, // 개발 서버 포트
+    port: parseInt(process.env.VITE_PORT) || 3000, // 개발 서버 포트
+  },
+  define: {
+    'env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL), // 환경 변수 정의
   },
   resolve: {
     alias: {
