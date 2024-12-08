@@ -30,13 +30,13 @@ jobs:
       # Docker 이미지 빌드: 현재 디렉토리의 Dockerfile을 사용하여 이미지를 빌드
       - name: Build Docker image
         run: |
-          docker build -t DailyDoodle .  # 'DailyDoodle'라는 이름으로 Docker 이미지 빌드
-          docker tag my-image:latest DailyDoodle:FE  # 'FE' 태그 추가
+          docker build -t daily_doodle .  # 'daily_doodle'라는 이름으로 Docker 이미지 빌드
+          docker tag my-image:latest daily_doodle:fe  # 'fe' 태그 추가
 
       # Docker 이미지 푸시: 빌드된 이미지를 DockerHub에 푸시
       - name: Push Docker image to DockerHub
         run: |
-          docker push DailyDoodle:FE  # DockerHub로 'DailyDoodle' 이미지를 푸시
+          docker push daily_doodle:fe  # DockerHub로 'daily_doodle' 이미지를 푸시
 
   deploy: # 배포 작업 정의
     runs-on: ubuntu-latest # Ubuntu 환경에서 실행
@@ -53,5 +53,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }} # EC2 SSH 키 (GitHub Secrets에서 가져옴)
           port: 22 # SSH 포트 (기본적으로 22번 포트를 사용)
           script: |
-            docker pull DailyDoodle:FE  # DockerHub에서 'DailyDoodle' 이미지를 가져옴
-            docker run -d -p 80:80 DailyDoodle:FE  # 포트 80에서 Docker 컨테이너를 실행
+            docker pull daily_doodle:fe  # DockerHub에서 'daily_doodle' 이미지를 가져옴
+            docker run -d -p 80:80 daily_doodle:fe  # 포트 80에서 Docker 컨테이너를 실행
