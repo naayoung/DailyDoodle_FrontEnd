@@ -16,7 +16,7 @@ export default defineConfig({
     //VitePWA(),
   ],
   server: {
-    port: 3000, // 개발 서버 포트
+    port: import.meta.env.PORT || 3000, // 개발 서버 포트
   },
   resolve: {
     alias: {
