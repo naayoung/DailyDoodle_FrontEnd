@@ -8,6 +8,8 @@ const Loading = <LoadingModal />;
 const Layout = lazy(() => import('@layouts/Layout.jsx'));
 // 메인페이지
 const MainPage = lazy(() => import('@pages/main/MainPage.jsx'));
+// 다이어리
+const DiaryRegist = lazy(() => import('@pages/diary/DiaryRegistPage.jsx'));
 
 const root = createBrowserRouter([
   {
@@ -21,6 +23,21 @@ const root = createBrowserRouter([
       {
         path: '',
         element: <MainPage />,
+      },
+    ],
+  },
+  // 다이어리
+  {
+    path: 'diary',
+    element: (
+      <Suspense fallback={Loading}>
+        <Layout />
+      </Suspense>
+    ),
+    children: [
+      {
+        path: 'regist',
+        element: <DiaryRegist />,
       },
     ],
   },
