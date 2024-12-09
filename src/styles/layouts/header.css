@@ -1,0 +1,27 @@
+.searchIcon {
+  display: flex;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+.searchIcon img {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.searchIcon:hover img {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.alarmIcon {
+  display: flex;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+.alarmIcon img {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.alarmIcon:hover img {
+  width: 1.7rem;
+  height: 1.7rem;
+}
