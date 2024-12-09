@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import FullButton from '@components/common/FullButton';
+import FullButton from '@components/common/indexCommon';
 
 const StyledContainer = styled.div`
   background-color: #f9f7c9;
