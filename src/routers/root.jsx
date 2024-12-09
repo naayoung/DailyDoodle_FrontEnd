@@ -10,6 +10,7 @@ const Layout = lazy(() => import('@layouts/Layout.jsx'));
 const MainPage = lazy(() => import('@pages/main/MainPage.jsx'));
 // 다이어리
 const DiaryRegist = lazy(() => import('@pages/diary/DiaryRegistPage.jsx'));
+const DiaryEdit = lazy(() => import('@pages/diary/DiaryEditPage.jsx'));
 
 const root = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const root = createBrowserRouter([
       {
         path: 'regist',
         element: <DiaryRegist />,
+      },
+      {
+        path: 'edit',
+        element: <DiaryEdit />,
       },
     ],
   },
